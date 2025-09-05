@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🎀 كشف الجنس</title>
+  <meta name="theme-color" content="#9aa0a6">
+  <style>
+    :root{
+      /* Neutral (before reveal) */
+      --bg:#f2f3f5;          /* خلفية رصاصية محايدة */
+      --card:#ffffff;
+      --text:#1f2937;        /* رمادي غامق للنص */
+      --accent:#6b7280;      /* رصاصي للأزرار والعدّاد قبل المفاجأة */
+      --accent-2:#9aa0a6;    /* تدرّج خفيف */
+      --shadow:0 6px 18px rgba(0,0,0,.06);
+      --msg:#b31374;         /* لون رسالة التهنئة بعد المفاجأة */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+      color:var(--text); background:var(--bg);
+      transition: background .6s ease, filter .6s ease;
+    }
+    .wrap{min-height:100%; display:flex; align-items:center; justify-content:center; padding:20px}
+    .card{width:min(720px,96vw); background:var(--card); border-radius:18px; padding:22px; box-shadow:var(--shadow); transition: transform .35s ease;}
+    h1{margin:8px 0 10px; font-size:clamp(22px,5vw,32px)}
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .btn{
+      appearance:none; border:none; cursor:pointer;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      color:#fff; padding:14px 18px; border-radius:12px; font-weight:700; font-size:18px;
+      transition: transform .06s ease, filter .2s ease;
+    }
+    .btn:active{transform:translateY(1px)}
+    .hidden{display:none !important}
+    #count{font-size:clamp(48px,12vw,86px); color:var(--accent); font-weight:900; margin:10px 0}
+    #msg{font-size:clamp(26px,7vw,42px); color:var(--msg); font-weight:800; margin-top:8px; text-align:center}
+    /* Confetti (light) */
+    .confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden}
+    .piece{position:absolute; top:-10px; width:8px; height:10px; opacity:.9; background:#ff7fc4; animation:fall linear forwards; will-change:transform;}
+    @keyframes fall{to{transform:translate3d(0,100vh,0) rotate(540deg)}}
+    @media (prefers-reduced-motion: reduce){ .piece{display:none} .card{transition:none} }
+
+    /* After reveal (pink surprise) */
+    body.celebrate{
+      --bg: linear-gradient(180deg, #fff4f9, #ffe4f0);
+      --accent:#ff4fa3;      /* تتحول الألوان للزهري فقط بعد انتهاء العدّاد */
+      --accent-2:#ff7fc4;
+      background: var(--bg);
+      animation: bgPulse 2.2s ease forwards;
+    }
+    @keyframes bgPulse{
+      0%{filter:saturate(1)}
+      50%{filter:saturate(1.25)}
+      100%{filter:saturate(1)}
+    }
+    body.celebrate .card{transform: scale(1.02)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div id="step1">
+        <h1>السدحان جايهم فرد جديد.. <br>تبون تعرفون 😍 وش هو؟</h1>
+        <div class="row">
+          <button class="btn" id="yes1">إيه</button>
+        </div>
+      </div>
+
+      <div id="step2" class="hidden">
+        <h1>متأكد؟؟؟</h1>
+        <button class="btn" id="yes2">إيه</button>
+      </div>
+
+      <div id="step3" class="hidden">
+        <div id="count">5</div>
+      </div>
+
+      <div id="step4" class="hidden">
+        <div id="msg">🎀 مبروك.. بنت محمد السدحان جاية ولمّوا البخور 🎀</div>
+        <div class="row" style="margin-top:10px; justify-content:center">
+          <button class="btn" id="again">إعادة</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    const qs = s => document.querySelector(s);
+    const step1 = qs('#step1'), step2 = qs('#step2'), step3 = qs('#step3'), step4 = qs('#step4');
+    const yes1 = qs('#yes1'), yes2 = qs('#yes2'), again = qs('#again');
+    const count = qs('#count'), confetti = qs('#confetti');
+
+    yes1.addEventListener('click', ()=>{ step1.classList.add('hidden'); step2.classList.remove('hidden'); });
+    yes2.addEventListener('click', ()=>{
+      step2.classList.add('hidden'); step3.classList.remove('hidden');
+      startCountdown(5);
+    });
+    again?.addEventListener('click', ()=>{
+      document.body.classList.remove('celebrate');
+      step4.classList.add('hidden'); step1.classList.remove('hidden'); confetti.innerHTML='';
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+
+    function startCountdown(n){
+      count.textContent = n;
+      const t = setInterval(()=>{
+        n--; count.textContent = n;
+        if(n<=0){ clearInterval(t); reveal(); }
+      }, 850);
+    }
+
+    function reveal(){
+      step3.classList.add('hidden');
+      step4.classList.remove('hidden');
+      document.body.classList.add('celebrate'); // يتحول للون الزهري بعد انتهاء العدّاد
+      makeConfetti(90);
+    }
+
+    function makeConfetti(num){
+      const colors = ['#ff7fc4','#ffd1ec','#ff4fa3','#ffc1e1'];
+      for(let i=0;i<num;i++){
+        const el = document.createElement('span');
+        el.className = 'piece';
+        const size = 6 + Math.random()*6;
+        el.style.width = size+'px';
+        el.style.height = (size*1.15)+'px';
+        el.style.left = Math.floor(Math.random()*100)+'vw';
+        el.style.background = colors[Math.random()*colors.length|0];
+        el.style.animationDuration = (2.6 + Math.random()*2.2)+'s';
+        el.style.animationDelay = (Math.random()*0.6)+'s';
+        confetti.appendChild(el);
+      }
+    }
+  </script>
+</body>
+</html>
