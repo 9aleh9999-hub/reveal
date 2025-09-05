@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>كشف جنس الجنين</title>
+  <script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=lNvrg7wY7HmaUuoAqtkx9mKmEul56g6yDzbR4UPZxB5AGDMREKaRXF3wprvJtXCWa115rX931t6Vuo1_vXv5WsdQZa7YCtg9dxBTbt22TD-sycUBmJUvNBwd3sw2hgHd3iRaZW1Hilgfwg53AVDKrw" charset="UTF-8"></script><style>
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      text-align: center;
+      background: #fff0f6;
+      margin: 0;
+      padding: 40px;
+    }
+    .hidden { display: none; }
+    .btn {
+      background: #ff4fa3;
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    #countdown {
+      font-size: 60px;
+      color: #ff4fa3;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    #message {
+      font-size: 36px;
+      color: #b31374;
+      font-weight: bold;
+      margin-top: 30px;
+    }
+    .confetti {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0; left: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .piece {
+      position: absolute;
+      width: 10px; height: 14px;
+      background: pink;
+      animation: fall 3s linear infinite;
+    }
+    @keyframes fall {
+      to { transform: translateY(100vh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="step1">السدحان جايهم فرد جديد.. تبي تعرف هو وش؟</h1>
+  <button class="btn" id="btn1">إيه</button>
+
+  <h1 id="step2" class="hidden">متأكد؟؟؟</h1>
+  <button class="btn hidden" id="btn2">إيه</button>
+
+  <div id="countdown" class="hidden"></div>
+  <div id="message" class="hidden">🎀 مبروك.. بنت محمد السدحان جايـــــــــــه ولمّوا البخور 🎀</div>
+
+  <div id="confetti" class="confetti"></div>
+
+<script>
+  const btn1 = document.getElementById("btn1");
+  const btn2 = document.getElementById("btn2");
+  const step1 = document.getElementById("step1");
+  const step2 = document.getElementById("step2");
+  const countdown = document.getElementById("countdown");
+  const message = document.getElementById("message");
+  const confettiBox = document.getElementById("confetti");
+
+  btn1.onclick = () => {
+    step1.classList.add("hidden");
+    btn1.classList.add("hidden");
+    step2.classList.remove("hidden");
+    btn2.classList.remove("hidden");
+  };
+
+  btn2.onclick = () => {
+    step2.classList.add("hidden");
+    btn2.classList.add("hidden");
+    startCountdown();
+  };
+
+  function startCountdown() {
+    countdown.classList.remove("hidden");
+    let n = 5;
+    countdown.textContent = n;
+    let timer = setInterval(() => {
+      n--;
+      countdown.textContent = n;
+      if (n === 0) {
+        clearInterval(timer);
+        countdown.classList.add("hidden");
+        message.classList.remove("hidden");
+        makeConfetti();
+      }
+    }, 1000);
+  }
+
+  function makeConfetti() {
+    for (let i = 0; i < 100; i++) {
+      const el = document.createElement("span");
+      el.className = "piece";
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.top = -10 + "px";
+      el.style.background = ["#ff4fa3","#ff7fc4","#ffd1ec","#ffc1e1"][Math.floor(Math.random()*4)];
+      el.style.animationDuration = (2 + Math.random()*3) + "s";
+      confettiBox.appendChild(el);
+    }
+  }
+</script>
+
+</body>
+</html>
